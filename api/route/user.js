@@ -9,6 +9,7 @@ var  router = express.Router();
 var config =require('../../config/dbconfig');
 var userController = require('../controller/userController');
 const { checkBody,check, validationResult } = require('express-validator/check');
+var emailController = require('../controller/emailController');
 
 /**
  * created by:Rashan samtih
@@ -90,7 +91,7 @@ router.post('/userVerify', (req, res, next) => {
                         }) 
                     })
                     .catch(err => {
-                        res.status(500).json({
+                        res.status(500).json({ 
                             state: false
                         })
                     })
@@ -101,6 +102,15 @@ router.post('/userVerify', (req, res, next) => {
                 })
             })
     }
+})
+
+router.get('/emailCheck/:email', (req, res, next) => {
+    var receiver = req.params.email;
+    var verificationCode = emailController.generateRandomNumber()
+    emailController.sendVerificationCode(receiver, verificationCode)
+    res.status(200).json({
+        state: true
+    })
 })
 
 /**
