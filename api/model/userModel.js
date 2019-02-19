@@ -13,7 +13,6 @@ const userSchema = mongoose.Schema({
     role: { type: String,default:null  },
     firstName: { type: String ,default:null },
     lastName: { type: String,default:null },
-    userName: { type: String,default:null },
     city: { type: String,default:null },
     contactNumber:{type: String,default:null },
     stream :{type:String,default:null },
