@@ -25,7 +25,7 @@ router.post('/register',[
 ],function(req,res){
             var firstName = req.body.firstName;
             var lastName  = req.body.lastName;
-            var userName  = req.body.userName;
+            var email = req.body.email;
             var password  = req.body.password;
             var city  = req.body.city;
             var stream    = req.body.stream;
@@ -41,6 +41,7 @@ router.post('/register',[
                     var newuser = new UserModel();
                     newuser. firstName =firstName,
                     newuser.lastName = lastName,
+                    newuser.email =email;
                     newuser.userName = userName,
                     newuser. password =password;
                     newuser.city= city,
