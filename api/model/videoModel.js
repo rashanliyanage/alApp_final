@@ -3,8 +3,7 @@ var Schema = mongoose.Schema;
 
 const VideoSchema = mongoose.Schema({
 
-    //topic shoud re consider
-    //topic shoud re consider
+   
     userId:{ type:Schema.Types.ObjectId, ref: 'User'},
     topic:{type:String,required:false},
     uploadedDate:{type:Date,default:Date.now()},
