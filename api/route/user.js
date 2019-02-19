@@ -9,6 +9,7 @@ var  router = express.Router();
 var config =require('../../config/dbconfig');
 var userController = require('../controller/userController');
 const { checkBody,check, validationResult } = require('express-validator/check');
+var emailController = require('../controller/emailController');
 
 /**
  * created by:Rashan samtih
@@ -71,6 +72,47 @@ userController.userRegister(newuser,res,(err,user)=>{
 });
 
 });
+
+router.post('/userVerify', (req, res, next) => {
+    var state = req.body.state;
+    var email = req.body.email;
+    if(state){
+        User
+            .find({ email: email})
+            .exec()
+            .then(user => {
+                console.log(user);
+                user
+                    .update({ email: email },{$set: { isVerified: true }})
+                    .then(result => {
+                        console.log(result);
+                        res.status(200).json({
+                            state: true
+                        }) 
+                    })
+                    .catch(err => {
+                        res.status(500).json({ 
+                            state: false
+                        })
+                    })
+            })
+            .catch(err => {
+                res.status(500).json({
+                    state: false
+                })
+            })
+    }
+})
+
+router.get('/emailCheck/:email', (req, res, next) => {
+    var receiver = req.params.email;
+    var verificationCode = emailController.generateRandomNumber()
+    emailController.sendVerificationCode(receiver, verificationCode)
+    res.status(200).json({
+        state: true
+    })
+})
+
 /**
  * created by:Yohan
  * created at:

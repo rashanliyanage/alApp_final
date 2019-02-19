@@ -24,7 +24,7 @@ router.post('/add-subject',function(req,res){
                 
 
             }
-    });
+    }); 
 });
 
 
