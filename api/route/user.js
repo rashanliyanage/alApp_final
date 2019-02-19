@@ -71,6 +71,38 @@ userController.userRegister(newuser,res,(err,user)=>{
 });
 
 });
+
+router.post('/userVerify', (req, res, next) => {
+    var state = req.body.state;
+    var email = req.body.email;
+    if(state){
+        User
+            .find({ email: email})
+            .exec()
+            .then(user => {
+                console.log(user);
+                user
+                    .update({ email: email },{$set: { isVerified: true }})
+                    .then(result => {
+                        console.log(result);
+                        res.status(200).json({
+                            state: true
+                        }) 
+                    })
+                    .catch(err => {
+                        res.status(500).json({
+                            state: false
+                        })
+                    })
+            })
+            .catch(err => {
+                res.status(500).json({
+                    state: false
+                })
+            })
+    }
+})
+
 /**
  * created by:Yohan
  * created at:
