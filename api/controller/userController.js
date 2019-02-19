@@ -4,7 +4,7 @@ var bcrypt = require('bcryptjs');
 
 
 var userRegister =function (newUser,res,callback){
-    UserModel.findOne({userName:newUser.userName},function(err,user){
+    UserModel.findOne({email:newUser.email},function(err,user){
         if(err){
             throw err;
         
