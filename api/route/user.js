@@ -30,6 +30,7 @@ router.post('/register',[
             var city  = req.body.city;
             var stream    = req.body.stream;
             var contactNumber =req.body.contactNumber;
+            var role =req.body.role;
 
             const errors = validationResult(req);
 
@@ -42,12 +43,11 @@ router.post('/register',[
                     newuser. firstName =firstName,
                     newuser.lastName = lastName,
                     newuser.email =email;
-                    newuser.userName = userName,
-                    newuser. password =password;
+                    newuser.password =password;
                     newuser.city= city,
                     newuser.stream=stream,
                     newuser.contactNumber=contactNumber,
-                    newuser.role=req.body.role
+                    newuser.role=role
 
                    
    
