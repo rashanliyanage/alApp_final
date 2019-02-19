@@ -18,11 +18,7 @@ var emailController = require('../controller/emailController');
  * 
  * **/
 
-router.post('/register',[
-            check('password').isLength({ min: 8 }),
-            check('userName').not().isEmpty()
-
-],function(req,res){
+router.post('/register',function(req,res){
             var firstName = req.body.firstName;
             var lastName  = req.body.lastName;
             var email = req.body.email;
