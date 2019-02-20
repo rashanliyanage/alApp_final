@@ -10,7 +10,7 @@ var userRegister =function (newUser,res,callback){
         
         }else if(user){
             res.status(200).json({
-                success:true, msg :'user alrey exist'    
+                success:true, msg :'user alredy exist'    
             });
 
         }else{
