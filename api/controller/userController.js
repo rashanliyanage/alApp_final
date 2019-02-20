@@ -9,6 +9,7 @@ var userRegister =function (newUser,res,callback){
             throw err;
         
         }else if(user){
+            console.log(user)
             res.status(200).json({
                 success:true, msg :'user alredy exist'    
             });

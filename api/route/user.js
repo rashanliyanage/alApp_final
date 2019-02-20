@@ -37,7 +37,7 @@ router.post('/register',function(req,res){
 
                     var newuser = new UserModel();
                     newuser.isVerified = false,
-                    newuser. firstName =firstName,
+                    newuser.firstName =firstName,
                     newuser.lastName = lastName,
                     newuser.email =email;
                     newuser.password =password;
