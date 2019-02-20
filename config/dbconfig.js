@@ -1,5 +1,5 @@
 module.exports ={
-    dbconnection1:'mongodb://rashan:rashan88@ds123822.mlab.com:23822/aldb',
+    dbconnection1:'mongodb://rashan:rashan88@ds123822.mlab.com:23822/ALBD',
     secret:'your secret',
      dbconnection2: 'mongodb://127.0.0.1:27017/ALDBB',
     // git:'git push  https://git.heroku.com/hidden-tundra-45076.git master',
