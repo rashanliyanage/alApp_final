@@ -14,7 +14,7 @@ var port = process.env.PORT || 8080;
 
 var mongoose =require('mongoose');
   
-mongoose.connect(db.dbconnection2, function (err, db) {
+mongoose.connect(db.dbconnection1, function (err, db) {
     if (err) {
         throw err;
     } else {
