@@ -36,6 +36,7 @@ router.post('/register',function(req,res){
 
 
                     var newuser = new UserModel();
+                    newuser.isVerified = false,
                     newuser. firstName =firstName,
                     newuser.lastName = lastName,
                     newuser.email =email;
@@ -57,7 +58,9 @@ userController.userRegister(newuser,res,(err,user)=>{
 
             
         }else{
-           
+            var receiver = req.body.email;
+            var verificationCode = emailController.generateRandomNumber()
+            emailController.sendVerificationCode(receiver, verificationCode)
             res.status(200).json({
                     
                 success:true, msg:"register successfully"
