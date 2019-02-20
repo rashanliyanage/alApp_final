@@ -8,10 +8,10 @@ var userRegister =function (newUser,res,callback){
         if(err){
             throw err;
         
-        }else if(user){
+        }else if(user.length>0){
             console.log(user)
             res.status(200).json({
-                success:true, msg :'user alredy exist'    
+                success:true, msg :'user alredy exist here'    
             });
 
         }else{
