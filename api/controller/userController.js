@@ -11,7 +11,7 @@ var userRegister =function (newUser,res,callback){
         }else if(user.length>0){
             console.log(user)
             res.status(200).json({
-                success:true, msg :'user alredy exist here'    
+                success:true, msg :'user alredy exist here'     
             });
 
         }else{
@@ -27,7 +27,7 @@ var userRegister =function (newUser,res,callback){
                     newUser.save(function(err,user){
                         console.log(err)
                         callback(err,user);
-                    });
+                    }).then().catch();
                     }
             });
 
@@ -70,6 +70,11 @@ var getTeacher = function(){
     .then(function(err,teachers){
 
 
+    })
+    .catch(err => {
+        res.status(500).json({
+            state: false
+        })
     });
 
 
