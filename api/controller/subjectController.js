@@ -18,7 +18,7 @@ var newSubject =  new subjectModel({
   displayName:displayName
 }); 
 
-newSubject.save(callback);
+newSubject.save(callback).catch(err);
 
  }
 }

@@ -25,6 +25,11 @@ async function addQuestion(req,callback) {
     
      newQuestion.save(function(err,newQuestion){
            callback(err,newQuestion);
+     })
+     .catch(err => {
+         res.status(500).json({
+             state: false
+         }) 
      });   
 }
 

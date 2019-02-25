@@ -1,6 +1,5 @@
 var nodemailer = require('nodemailer');
 var crypto = require('crypto');
-var smtpTransport = require('nodemailer-smtp-transport');
 
 function sendVerificationCode(receiver, verificationCode) {
     const sender = 'project.alapp@gmail.com';
