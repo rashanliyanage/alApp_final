@@ -4,13 +4,14 @@ var bcrypt = require('bcryptjs');
 
 
 var userRegister =function (newUser,res,callback){
-    UserModel.findOne({userName:newUser.userName},function(err,user){
+    UserModel.find({email:newUser.email},function(err,user){
         if(err){
             throw err;
         
-        }else if(user){
+        }else if(user.length>0){
+            console.log(user)
             res.status(200).json({
-                success:true, msg :'user alrey exist'    
+                success:true, msg :'user alredy exist here'    
             });
 
         }else{

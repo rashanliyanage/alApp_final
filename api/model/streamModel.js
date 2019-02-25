@@ -3,8 +3,8 @@ var Schema = mongoose.Schema;
 
 const streamSchema = mongoose.Schema({
 
-    name: { type: String, required: false,default:null, },
-    displayName:{type:String,require:false,default:null},
+    name: { type: String, default:null, },
+    displayName:{type:String,default:null},
 
 });
 

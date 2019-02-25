@@ -9,6 +9,7 @@ var  router = express.Router();
 var config =require('../../config/dbconfig');
 var userController = require('../controller/userController');
 const { checkBody,check, validationResult } = require('express-validator/check');
+var emailController = require('../controller/emailController');
 
 /**
  * created by:Rashan samtih
@@ -17,18 +18,15 @@ const { checkBody,check, validationResult } = require('express-validator/check')
  * 
  * **/
 
-router.post('/register',[
-            check('password').isLength({ min: 8 }),
-            check('userName').not().isEmpty()
-
-],function(req,res){
+router.post('/register',function(req,res){
             var firstName = req.body.firstName;
             var lastName  = req.body.lastName;
-            var userName  = req.body.userName;
+            var email = req.body.email;
             var password  = req.body.password;
             var city  = req.body.city;
             var stream    = req.body.stream;
             var contactNumber =req.body.contactNumber;
+            var role =req.body.role;
 
             const errors = validationResult(req);
 
@@ -38,14 +36,15 @@ router.post('/register',[
 
 
                     var newuser = new UserModel();
-                    newuser. firstName =firstName,
+                    newuser.isVerified = false,
+                    newuser.firstName =firstName,
                     newuser.lastName = lastName,
-                    newuser.userName = userName,
-                    newuser. password =password;
+                    newuser.email =email;
+                    newuser.password =password;
                     newuser.city= city,
                     newuser.stream=stream,
                     newuser.contactNumber=contactNumber,
-                    newuser.role=req.body.role
+                    newuser.role=role
 
                    
    
@@ -59,7 +58,9 @@ userController.userRegister(newuser,res,(err,user)=>{
 
             
         }else{
-           
+            var receiver = req.body.email;
+            var verificationCode = emailController.generateRandomNumber()
+            emailController.sendVerificationCode(receiver, verificationCode)
             res.status(200).json({
                     
                 success:true, msg:"register successfully"
@@ -71,6 +72,47 @@ userController.userRegister(newuser,res,(err,user)=>{
 });
 
 });
+
+router.post('/userVerify', (req, res, next) => {
+    var state = req.body.state;
+    var email = req.body.email;
+    if(state){
+        User
+            .find({ email: email})
+            .exec()
+            .then(user => {
+                console.log(user);
+                user
+                    .update({ email: email },{$set: { isVerified: true }})
+                    .then(result => {
+                        console.log(result);
+                        res.status(200).json({
+                            state: true
+                        }) 
+                    })
+                    .catch(err => {
+                        res.status(500).json({ 
+                            state: false
+                        })
+                    })
+            })
+            .catch(err => {
+                res.status(500).json({
+                    state: false
+                })
+            })
+    }
+})
+
+router.get('/emailCheck/:email', (req, res, next) => {
+    var receiver = req.params.email;
+    var verificationCode = emailController.generateRandomNumber()
+    emailController.sendVerificationCode(receiver, verificationCode)
+    res.status(200).json({
+        state: true
+    })
+})
+
 /**
  * created by:Yohan
  * created at:
