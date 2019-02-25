@@ -1,11 +1,8 @@
 const mongoose = require('mongoose');
-var Schema = mongoose.Schema;
+
 const userSchema = mongoose.Schema({
-  
     email: { 
-        type: String,  
-         type: String, 
-   
+        type: String,
         lowercase: true,
         match: /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/
     },
@@ -24,6 +21,4 @@ const userSchema = mongoose.Schema({
     }]
 });
 
-//module.exports = mongoose.model('User', userSchema);
 module.exports.userModel = mongoose.model('User', userSchema);
-
