@@ -8,21 +8,17 @@ const QuestionSchema = mongoose.Schema({
      qNumber:{type:String,default:null},// question number of paper
      question:{type:String,default:null,},//question
      number:{type:Number,default:false,},
-  
      qImageUrl:{type:String,default:null},
      correctAnswer:[{
         number:{type:Number,efault:null},
      }],
-     answers:[
-            {
+     answers:[{
             number:{type:Number,default:null},
             value:{type:String,default:null},// answer
             aImageUrl:{type:String,default:null}//answer image url
-          }
-     ],
+     }],
      videoId:[{type:Schema.Types.ObjectId, ref: 'Videos'}],
      ansDiscription:{type:String,default:null},//should be a url
-
 });
-var QuestionModel = mongoose.model('Questions', QuestionSchema);
-module.exports =QuestionModel;
+
+module.exports = mongoose.model('Questions', QuestionSchema);
