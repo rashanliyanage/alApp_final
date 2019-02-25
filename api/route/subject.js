@@ -14,15 +14,11 @@ router.post('/add-subject',function(req,res){
             if(err){
                 throw err;
             }else{
-
-
                 res.status(200).send({
                   success:true,
                   subject:subject,
                   msg:'success add subject'
                 });
-                
-
             }
     }); 
 });
