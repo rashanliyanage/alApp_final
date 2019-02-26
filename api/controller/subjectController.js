@@ -49,7 +49,7 @@ async function getSubject(res,callback) {
   
  }
 
- async function getYeasBySubject(res,subjectId){
+ async function addTopic(subjectName,number,name,displayName){
        
 
  }
