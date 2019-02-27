@@ -1,39 +1,54 @@
 var User = require('../model/userModel');
-var UserModel =User.userModel;
+// var UserModel =User.userModel;
 var bcrypt = require('bcryptjs');
+var mongoose = require('mongoose');
 
+// var userRegister =function (newUser,res,callback){
+//     UserModel
+//         .find({email:newUser.email},function(err,user){
+//             if(err){
+//                 // throw err;
+//             }else if(user.length>0){
+//                 console.log(user)
+//                 return res.status(200).json({
+//                     success:true, 
+//                     msg :'user alredy exist here'
+//                 });
+//             }else {
+//                 bcrypt.genSalt(10, function(err, salt) {
+//                     bcrypt.hash(newUser.password, salt, function(err, hash) {
+//                         if(err){ 
+//                             throw err;
+//                         }else{
+//                             newUser.password =hash; 
+//                             console.log(newUser);
+//                             newUser.save(function(err,user){ 
+//                             callback(err,user);
+//                             });
+//                         }
+//                     });
 
-var userRegister =function (newUser,res,callback){
-    UserModel.find({email:newUser.email},function(err,user){
-        if(err){
-            throw err;
-        
-        }else if(user.length>0){
-            console.log(user)
-            res.status(200).json({
-                success:true, msg :'user alredy exist here'     
-            });
+//                 });
+//             }
+//         }) 
+// } 
 
-        }else{
-            bcrypt.genSalt(10, function(err, salt) {
-                bcrypt.hash(newUser.password, salt, function(err, hash) {
-                    if(err){
-                        throw err;
-                    }else{
-
-                    newUser.password =hash;
-                  console.log(newUser);
-                   
-                    newUser.save(function(err,user){
-                        console.log(err)
-                        callback(err,user);
-                    }).then().catch();
-                    }
-            });
-
-        });
-        }
+function saveUser(req, hash){
+    console.log("save user")
+    const user = new User({
+        _id: new mongoose.Types.ObjectId(),
+        isVerified: false,
+        firstName: req.body.firstName,
+        lastName: req.body.lastName,
+        email: req.body.email,
+        password: hash,
+        city: req.body.city,
+        stream: req.body.stream,
+        contactNumber: req.body.contactNumber,
+        role: req.body.role
     });
+    console.log(user)
+    return user.save();
 }
 
 var  getStudentByDistric = function(serchkey,callback){
@@ -108,6 +123,10 @@ module.exports.comparePassword = function(candidatePassword, hash, callback){
 }
 
 
-module.exports.userRegister =userRegister;
+// module.exports.userRegister =userRegister;
 module.exports.getStudentByDistric =getStudentByDistric;
 module.exports.getStudentWithoutDisctric =getStudentWithoutDisctric;
+
+module.exports = {
+    saveUser: saveUser
+}
