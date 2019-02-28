@@ -51,9 +51,7 @@ router.post('/register', (req, res, next) => {
                                 });
                         }   
                     });
-                });
-                    
-                
+                });  
             }
         })
 })
@@ -90,14 +88,12 @@ router.post('/userVerify', (req, res, next) => {
                         msg: "Verification Code Incorrect"
                     })
                 }
-                
             } else{
                 res.status(200).json({
                     state: false,
                     msg: "User Already Verified"
                 }) 
-            }
-            
+            }    
         })
         .catch(err => {
             res.status(500).json({
@@ -152,15 +148,6 @@ router.post('/login', (req, res) =>{
         });
 });
 
-router.get('/emailCheck/:email', (req, res, next) => {
-    var receiver = req.params.email;
-    var verificationCode = emailController.generateRandomNumber()
-    emailController.sendVerificationCode(receiver, verificationCode)
-    res.status(200).json({
-        state: true
-    })
-})
-
 /**
  * created by:Yohan
  * created at:
@@ -184,32 +171,21 @@ router.post('/teacherRegistration', (req, res, next) => {
  * **/
 
 router.get('/get-student/:searchDistric', function (req, res) {
-
     const serchkey = req.params.searchDistric;
     console.log(serchkey);
-
-
     if (!(serchkey == undefined || serchkey == null || serchkey == '')) {
-
         userController.getStudentByDistric(serchkey, function (err, students) {
             if (err) {
                 res.status(500).json({
                     success: false, msg: "failed to geting student"
-
                 });
             } else {
-
                 res.status(200).json({
-
                     success: true, msg: "success getting students",
                     students: students
-
                 });
-
             }
-
         });
-
     }
 });
 
@@ -221,29 +197,18 @@ router.get('/get-student/:searchDistric', function (req, res) {
  * **/
 
 router.get('/get-student', function (req, res) {
-
     userController.getStudentWithoutDisctric(function (err, students) {
-
         if (err) {
             res.status(500).json({
                 success: false, msg: "failed geting student"
-
             });
         } else {
-
             res.status(200).json({
-
                 success: true, msg: "success getting students",
                 students: students
-
             });
         }
-
     });
-
 });
 
-
-
 module.exports = router;
-
