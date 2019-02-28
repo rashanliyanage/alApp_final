@@ -21,7 +21,7 @@ router.post('/register', (req, res, next) => {
                     state: false, 
                     exist: true
                 });
-            } else {
+            } else { 
                 console.log("else block")
                 bcrypt.genSalt(10, function(salt) {
                     bcrypt.hash(req.body.password, salt, null, function(err, hash) {
