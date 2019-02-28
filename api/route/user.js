@@ -1,8 +1,8 @@
 var User = require('../model/userModel');
-var bcrypt = require('bcrypt')
+var bcrypt = require('bcrypt-nodejs');
 var express = require('express');
-const passport = require('passport');
-const jwt = require('jsonwebtoken');
+var passport = require('passport');
+var jwt = require('jsonwebtoken');
 var router = express.Router();
 var config = require('../../config/dbconfig');
 var userController = require('../controller/userController');
@@ -14,7 +14,7 @@ router.post('/register', (req, res, next) => {
     User
         .find({ email: req.body.email })
         .exec()
-        .then(user => { 
+        .then(user => {  
             if(user.length >= 1){
                 console.log('user exist');
                 return res.status(409).json({
@@ -23,33 +23,37 @@ router.post('/register', (req, res, next) => {
                 });
             } else {
                 console.log("else block")
-                bcrypt.hash(req.body.password, 10, (err, hash) => {
-                    console.log(hash)
-                    if(err){
-                        return res.status(500).json({     
-                        });
-                    }else {
-                        userController.saveUser(req, hash, verificationCode)
-                            .then(result => {
-                                var receiver = req.body.email;
-                                emailController.sendVerificationCode(receiver, verificationCode)
-                                console.log("User signed up"); 
-                                    res.status(201).json({
-                                    state: true,
-                                    exist: false,
-                                    code: verificationCode
+                bcrypt.genSalt(10, function(salt) {
+                    bcrypt.hash(req.body.password, salt, null, function(err, hash) {
+                        console.log(hash)
+                        if(err){
+                            return res.status(500).json({     
+                            });  
+                        }else {
+                            userController.saveUser(req, hash, verificationCode)
+                                .then(result => {
+                                    var receiver = req.body.email;
+                                    emailController.sendVerificationCode(receiver, verificationCode)
+                                    console.log("User signed up"); 
+                                        res.status(201).json({
+                                        state: true,
+                                        exist: false, 
+                                        code: verificationCode 
+                                    });
+                                })
+                                .catch(err => {
+                                    console.log(err);  
+                                    res.status(500).json({
+                                        error: err,
+                                        state: false,
+                                        Message: "Some Validation Errors"
+                                    });
                                 });
-                            })
-                            .catch(err => {
-                                console.log(err);  
-                                res.status(500).json({
-                                    error: err,
-                                    state: false,
-                                    Message: "Some Validation Errors"
-                                });
-                            });
-                    }
+                        }   
+                    });
                 });
+                    
+                
             }
         })
 })
