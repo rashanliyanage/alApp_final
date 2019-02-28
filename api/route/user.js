@@ -9,7 +9,7 @@ var userController = require('../controller/userController');
 var emailController = require('../controller/emailController');
 
 router.post('/register', (req, res, next) => {
-    console.log("register")
+    console.log(req.body);
     var verificationCode = emailController.generateRandomNumber()
     User
         .find({ email: req.body.email })
