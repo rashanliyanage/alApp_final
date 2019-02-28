@@ -113,32 +113,36 @@ router.post('/login', (req, res) =>{
                     state: false,
                     JWT_Token: null
                 });
-            }
-            console.log(user);
-            console.log(user[0].password);
-            console.log(req.body.password);
-            console.log(process.env.JWT_KEY);
-            bcrypt.compare(req.body.password, user[0].password, (err, result) => {
-                if (result){
-                    token = jwt.sign({user: user[0]}, process.env.JWT_KEY, {expiresIn: "10h"}, (err, token) => {
-                        if(err){
-                            res.json({ error: err })
-                        } else {
-                            return res.status(200).json({
-                                state: true,
-                                JWT_Token: token 
-                            }) 
-                        }
-                        console.log('token genetas : '+ this.token);
-                    });  
-                }
-                else {
-                    return res.status(200).json({
+            } else{
+                if(user[0].isVerified == false){
+                    res.status(401).json({
                         state: false,
-                        JWT_Token: null
-                    })
+                        msg: "Not Verified"
+                    }) 
+                } else{
+                    bcrypt.compare(req.body.password, user[0].password, (err, result) => {
+                        if (result){
+                            token = jwt.sign({user: user[0]}, process.env.JWT_KEY, {expiresIn: "10h"}, (err, token) => {
+                                if(err){
+                                    res.json({ error: err })
+                                } else {
+                                    return res.status(200).json({
+                                        state: true,
+                                        JWT_Token: token 
+                                    }) 
+                                }
+                                console.log('token genetas : '+ this.token);
+                            });  
+                        }
+                        else {
+                            return res.status(200).json({
+                                state: false,
+                                JWT_Token: null
+                            })
+                        }
+                    });
                 }
-            });
+            }
         })
         .catch(err => { 
             console.log(err);
