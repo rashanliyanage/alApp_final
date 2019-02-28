@@ -12,11 +12,15 @@ var subject =require('./api/route/subject');
 var questionRoutes =require('./api/route/question');
 var userRoutes =require('./api/route/user');
 
-require('dotenv').config()
+mongoose.Promise = global.Promise;
 
+require('dotenv').config()
 app.use(morgan('dev'));
 app.use(passport.initialize());  
-app.use(passport.session());  
+app.use(passport.session()); 
+
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 
 mongoose.connect(db.dbconnection1, function (err, db) {
     if (err) {
@@ -38,9 +42,6 @@ app.use((req, res, next)=>{
     }
     next();
 });
-
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
 
 app.get('/',function(req,res){
     res.send('hello vicerant company......');
