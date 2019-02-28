@@ -10,6 +10,7 @@ var emailController = require('../controller/emailController');
 
 router.post('/register', (req, res, next) => {
     console.log("register")
+    var verificationCode = emailController.generateRandomNumber()
     User
         .find({ email: req.body.email })
         .exec()
@@ -17,7 +18,7 @@ router.post('/register', (req, res, next) => {
             if(user.length >= 1){
                 console.log('user exist');
                 return res.status(409).json({
-                    state: false,
+                    state: false, 
                     exist: true
                 });
             } else {
@@ -28,15 +29,15 @@ router.post('/register', (req, res, next) => {
                         return res.status(500).json({     
                         });
                     }else {
-                        userController.saveUser(req, hash)
+                        userController.saveUser(req, hash, verificationCode)
                             .then(result => {
                                 var receiver = req.body.email;
-                                var verificationCode = emailController.generateRandomNumber()
                                 emailController.sendVerificationCode(receiver, verificationCode)
                                 console.log("User signed up"); 
                                     res.status(201).json({
                                     state: true,
                                     exist: false,
+                                    code: verificationCode
                                 });
                             })
                             .catch(err => {
@@ -54,34 +55,51 @@ router.post('/register', (req, res, next) => {
 })
 
 router.post('/userVerify', (req, res, next) => {
-    var state = req.body.state;
     var email = req.body.email;
-    if (state) {
-        User
-            .find({ email: email })
-            .exec()
-            .then(user => {
-                console.log(user);
-                user
-                    .update({ email: email }, { $set: { isVerified: true } })
-                    .then(result => {
-                        console.log(result);
-                        res.status(200).json({
-                            state: true
+    var code = req.body.code;
+    console.log(email);
+    console.log(code);
+    User
+        .find({ email: email })
+        .exec()
+        .then(user => {
+            console.log(user[0].isVerified);
+            if(user[0].isVerified == false){
+                if(user[0].verificationCode == code){
+                    console.log("second if")
+                    user[0]
+                        .update({ $set: { isVerified: true } })
+                        .then(result => {
+                            console.log(result);
+                            res.status(200).json({
+                                state: true
+                            }) 
                         })
-                    })
-                    .catch(err => {
-                        res.status(500).json({
-                            state: false
+                        .catch(err => {
+                            res.status(500).json({
+                                state: false
+                            })
                         })
+                } else{
+                    res.status(200).json({
+                        state: false,
+                        msg: "Verification Code Incorrect"
                     })
+                }
+                
+            } else{
+                res.status(200).json({
+                    state: false,
+                    msg: "User Already Verified"
+                }) 
+            }
+            
+        })
+        .catch(err => {
+            res.status(500).json({
+                state: false
             })
-            .catch(err => {
-                res.status(500).json({
-                    state: false
-                })
-            })
-    }
+        })
 })
 
 router.post('/login', (req, res) =>{

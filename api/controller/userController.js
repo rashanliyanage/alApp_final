@@ -33,11 +33,12 @@ var mongoose = require('mongoose');
 //         }) 
 // } 
 
-function saveUser(req, hash){
+function saveUser(req, hash, verificationCode){
     console.log("save user")
     const user = new User({
         _id: new mongoose.Types.ObjectId(),
         isVerified: false,
+        verificationCode: verificationCode,
         firstName: req.body.firstName,
         lastName: req.body.lastName,
         email: req.body.email,
