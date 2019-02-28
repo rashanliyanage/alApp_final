@@ -19,7 +19,7 @@ app.use(morgan('dev'));
 app.use(passport.initialize());  
 app.use(passport.session()); 
 
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 mongoose.connect(db.dbconnection1, function (err, db) {
