@@ -5,12 +5,18 @@ var mongoose = require('mongoose');
 var db = require('./config/dbconfig');
 var cors = require('cors');
 var mongoose =require('mongoose');
+var morgan = require('morgan');
+var passport = require('passport');
 
 var subject =require('./api/route/subject');
 var questionRoutes =require('./api/route/question');
 var userRoutes =require('./api/route/user');
 
 require('dotenv').config()
+
+app.use(morgan('dev'));
+app.use(passport.initialize());  
+app.use(passport.session());  
 
 mongoose.connect(db.dbconnection1, function (err, db) {
     if (err) {
