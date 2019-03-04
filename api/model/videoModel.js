@@ -1,10 +1,7 @@
 const mongoose = require('mongoose');
-var Schema = mongoose.Schema;
 
-const VideoSchema = mongoose.Schema({
-
-   
-    userId:{ type:Schema.Types.ObjectId, ref: 'User'},
+const VideoSchema = mongoose.Schema({  
+    userId:{ type:mongoose.Schema.Types.ObjectId, ref: 'User'},
     topic:{type:String,required:false},
     uploadedDate:{type:Date,default:Date.now()},
     expireDate:{type:Date},
@@ -13,23 +10,10 @@ const VideoSchema = mongoose.Schema({
     ratedUserCount:{type:Number,required:false},
     viewCount:{type:Number,required:false},
     LikesCount:{type:Number,required:false},
-    comments:[
-        {user_id:{type:Schema.Types.ObjectId, ref: 'User'},
-         comment:{type:String}
-        }
-    ]
-
+    comments:[{
+        user_id:{type:mongoose.Schema.Types.ObjectId, ref: 'User'},
+        comment:{type:String}
+    }]
 });
 
-
-const topicSchema = mongoose.Schema({
-   
-
-
-});
-
-module.exports ={
-   VideoMOdel: mongoose.model('Videos',VideoSchema)
-
-}
-
+module.exports = mongoose.model('Videos',VideoSchema)
