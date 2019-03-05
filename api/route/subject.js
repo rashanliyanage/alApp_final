@@ -3,7 +3,7 @@ var router = express.Router();
 var Subject = require('../model/subjectModel');
 var subjectController = require('../controller/subjectController');
 
-router.post('/add-subject', function (req, res) {
+router.post('/add-subject', function (req,res) {
     console.log('add subject');
 
     var subjectName = req.body.subjectName;
@@ -25,7 +25,7 @@ router.post('/add-subject', function (req, res) {
 
 
 
-router.post('/add-topic', function (req, res) {
+router.post('/add-topic', function (req,res) {
     console.log('add new topic');
 
     var subjectName = req.body.subjectName;
@@ -47,13 +47,9 @@ router.post('/add-topic', function (req, res) {
     });
 });
 
-
 router.get('/get-subjects', function (req, res) {
     subjectController.getSubject(res);
 });
-
-
-
 
 
 module.exports = router;

@@ -61,5 +61,6 @@ async function getSubject(res,callback) {
     )     
  }
 
+module.exports.addTopic = addTopic;
 module.exports.addSubject = addSubject;
 module.exports.getSubject = getSubject;
