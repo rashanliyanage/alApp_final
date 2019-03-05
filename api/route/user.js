@@ -158,6 +158,7 @@ router.post('/login', (req, res) =>{
 //user edit or update
 router.post('/updateProfile', (req, res, next) => {
     console.log("User Update")
+    console.log(req.body)
     userEmail = req.body.email;
     User
         .find({ email: userEmail })
@@ -181,17 +182,16 @@ router.post('/updateProfile', (req, res, next) => {
                 user[0].class = req.body.class;
                 // console.log(user[0])
                 user[0]
-                    .update({ _id: user[0]._id })
-                    .exec()
-                    .then(result => { 
-                        console.log(result)
+                    .save()
+                    .then(result => {  
+                        // console.log(result)
                         res.status(200).json({
                             state: true, 
                             msg: "User Updated"
                         })
                     })
                     .catch(err => {
-                        console.log(err)
+                        // console.log(err)
                         res.status(500).json({
                             state: false,
                             msg: "Error on update"
