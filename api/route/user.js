@@ -8,6 +8,7 @@ var config = require('../../config/dbconfig');
 var userController = require('../controller/userController');
 var emailController = require('../controller/emailController');
 
+//user registration
 router.post('/register', (req, res, next) => {
     console.log(req.body);
     var verificationCode = emailController.generateRandomNumber()
@@ -28,7 +29,7 @@ router.post('/register', (req, res, next) => {
                         console.log(hash)
                         if(err){
                             return res.status(500).json({     
-                            });  
+                            });   
                         }else {
                             userController.saveUser(req, hash, verificationCode)
                                 .then(result => {
@@ -56,6 +57,7 @@ router.post('/register', (req, res, next) => {
         })
 })
 
+//user verification
 router.post('/userVerify', (req, res, next) => {
     var email = req.body.email;
     var code = req.body.code;
@@ -102,6 +104,7 @@ router.post('/userVerify', (req, res, next) => {
         })
 })
 
+//user login
 router.post('/login', (req, res) =>{
     console.log("login")
     User 
@@ -151,6 +154,59 @@ router.post('/login', (req, res) =>{
             }); 
         });
 });
+
+//user edit or update
+router.post('/updateProfile', (req, res, next) => {
+    console.log("User Update")
+    console.log(req.body)
+    userEmail = req.body.email;
+    User
+        .find({ email: userEmail })
+        .exec()
+        .then(user => {
+            if(user.length < 1){
+                res.status(404).json({
+                    state: false,
+                    msg: "User Not Find"
+                })
+            } else{
+                // console.log(user[0]);
+                user[0].isVerified = req.body.isVerified;
+                user[0].password = req.body.password;
+                user[0].role = req.body.role;
+                user[0].firstName = req.body.firstName;
+                user[0].lastName = req.body.lastName;
+                user[0].city = req.body.city;
+                user[0].contactNumber = req.body.contactNumber;
+                user[0].stream = req.body.stream;
+                user[0].class = req.body.class;
+                // console.log(user[0])
+                user[0]
+                    .save()
+                    .then(result => {  
+                        // console.log(result)
+                        res.status(200).json({
+                            state: true, 
+                            msg: "User Updated"
+                        })
+                    })
+                    .catch(err => {
+                        // console.log(err)
+                        res.status(500).json({
+                            state: false,
+                            msg: "Error on update"
+                        })
+                    })
+            } 
+        })
+        .catch(err => {
+            console.log(err)
+            res.status(500).json({
+                state: false,
+                msg: "Error on find"
+            })
+        })
+})
 
 /**
  * created by:Yohan

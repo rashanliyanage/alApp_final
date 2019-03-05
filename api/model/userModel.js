@@ -8,18 +8,18 @@ const userSchema = mongoose.Schema({
     },
     isVerified: { type: Boolean },
     verificationCode: { type: String },
-    password: { type: String,default:null },
-    role: { type: String,default:null  },
-    firstName: { type: String ,default:null },
-    lastName: { type: String,default:null },
-    city: { type: String,default:null },
-    contactNumber:{type: String,default:null },
-    stream :{type:String,default:null },
+    password: { type: String, default:null },
+    role: { type: String, default:null  },
+    firstName: { type: String , default:null },
+    lastName: { type: String, default:null },
+    city: { type: String, default:null },
+    contactNumber:{type: String, default:null },
+    stream :{type:String, default:null },
     class: [{
-        district: { type: String,default:null },
-        institute: { type: String,default:null },
-        classDate: { type: String,default:null }
+        district: { type: String, default:null },
+        institute: { type: String, default:null },
+        classDate: { type: String, default:null }
     }]
 });
 
-module.exports = mongoose.model('User', userSchema);
+module.exports = mongoose.model('User', userSchema); 
