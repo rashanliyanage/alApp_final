@@ -49,10 +49,18 @@ async function getSubject(res,callback) {
   
  }
 
- async function getYeasBySubject(res,subjectId){
-       
-
+ async function addTopic(subjectName,number,name,displayName){
+    subjectModel.find({subjectName:subjectName}).exec().then(
+      result => {
+        if(result>0){
+          result.topic.number=number;
+          result.topic.name=name;
+          result.topic.displayName=displayName
+        }
+      }
+    )     
  }
 
+module.exports.addTopic = addTopic;
 module.exports.addSubject = addSubject;
 module.exports.getSubject = getSubject;

@@ -9,15 +9,17 @@ const QuestionSchema = mongoose.Schema({
      number: { type:Number, default:false },
      qImageUrl: { type:String, default:null },
      correctAnswer: [{
-        number: { type:Number, default:null },
+        cAnsNumber: { type:Number, default:null },
      }],
      answers:[{
-            number: { type:Number, default:null },
-            value: { type:String, default:null },// answer
+            aNumber: { type:Number, default:null },
+            aValue: { type:String, default:null },// answer
             aImageUrl: { type:String, default:null }//answer image url
      }],
      videoId: [{ type:mongoose.Schema.Types.ObjectId, ref: 'Videos' }],
      ansDiscription: { type:String, default:null },//should be a url
+},{
+   timestamps: true
 });
 
 module.exports = mongoose.model('Questions', QuestionSchema);
