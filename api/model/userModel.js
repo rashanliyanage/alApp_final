@@ -19,7 +19,9 @@ const userSchema = mongoose.Schema({
         district: { type: String, default:null },
         institute: { type: String, default:null },
         classDate: { type: String, default:null }
-    }]
+    }] 
+},{
+    timestamps: true
 });
 
 module.exports = mongoose.model('User', userSchema); 
