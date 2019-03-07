@@ -20,6 +20,8 @@ const userSchema = mongoose.Schema({
         institute: { type: String, default:null },
         classDate: { type: String, default:null }
     }] 
+},{
+    timestamps: true
 });
 
 module.exports = mongoose.model('User', userSchema); 
