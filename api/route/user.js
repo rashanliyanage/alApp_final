@@ -5,8 +5,11 @@ var passport = require('passport');
 var jwt = require('jsonwebtoken');
 var router = express.Router();
 var config = require('../../config/dbconfig');
+
 var userController = require('../controller/userController');
 var emailController = require('../controller/emailController');
+
+var auth = require('../middlewares/auth-guard');
 
 //user registration
 router.post('/register', (req, res, next) => {
@@ -19,7 +22,7 @@ router.post('/register', (req, res, next) => {
             if(user.length >= 1){
                 console.log('user exist');
                 return res.status(409).json({
-                    state: false, 
+                    state: 4, 
                     exist: true
                 });
             } else { 
@@ -37,7 +40,7 @@ router.post('/register', (req, res, next) => {
                                     emailController.sendVerificationCode(receiver, verificationCode)
                                     console.log("User signed up"); 
                                         res.status(201).json({
-                                        state: true,
+                                        state: 1,
                                         exist: false, 
                                         code: verificationCode 
                                     });
@@ -45,8 +48,7 @@ router.post('/register', (req, res, next) => {
                                 .catch(err => {
                                     console.log(err);  
                                     res.status(500).json({
-                                        error: err,
-                                        state: false,
+                                        state: 5,
                                         Message: "Some Validation Errors"
                                     });
                                 });
@@ -76,30 +78,30 @@ router.post('/userVerify', (req, res, next) => {
                         .then(result => {
                             console.log(result);
                             res.status(200).json({
-                                state: true
+                                state: 1
                             }) 
                         })
                         .catch(err => {
                             res.status(500).json({
-                                state: false
+                                state: 5
                             })
                         })
                 } else{
                     res.status(200).json({
-                        state: false,
+                        state: 6,
                         msg: "Verification Code Incorrect"
                     })
                 }
             } else{
                 res.status(200).json({
-                    state: false,
+                    state: 7,
                     msg: "User Already Verified"
                 }) 
             }    
         })
         .catch(err => {
             res.status(500).json({
-                state: false
+                state: 5
             })
         })
 })
@@ -113,13 +115,13 @@ router.post('/login', (req, res) =>{
         .then(user => {
             if(user.length < 1){
                 return res.status(200).json({
-                    state: false,
+                    state: 2,
                     JWT_Token: null
                 });
             } else{
                 if(user[0].isVerified == false){
                     res.status(401).json({
-                        state: false,
+                        state: 3,
                         msg: "Not Verified"
                     }) 
                 } else{
@@ -130,7 +132,7 @@ router.post('/login', (req, res) =>{
                                     res.json({ error: err })
                                 } else {
                                     return res.status(200).json({
-                                        state: true,
+                                        state: 1,
                                         JWT_Token: token 
                                     }) 
                                 }
@@ -139,7 +141,7 @@ router.post('/login', (req, res) =>{
                         }
                         else {
                             return res.status(200).json({
-                                state: false,
+                                state: 5,
                                 JWT_Token: null
                             })
                         }
@@ -150,13 +152,13 @@ router.post('/login', (req, res) =>{
         .catch(err => { 
             console.log(err);
                 res.status(500).json({
-                error: err
+                state: 5
             }); 
         });
 });
 
 //user edit or update
-router.post('/updateProfile', (req, res, next) => {
+router.post('/updateProfile', auth.decode, (req, res, next) => {
     console.log("User Update")
     console.log(req.body)
     userEmail = req.body.email;
@@ -166,7 +168,7 @@ router.post('/updateProfile', (req, res, next) => {
         .then(user => {
             if(user.length < 1){
                 res.status(404).json({
-                    state: false,
+                    state: 2,
                     msg: "User Not Find"
                 })
             } else{
@@ -186,14 +188,14 @@ router.post('/updateProfile', (req, res, next) => {
                     .then(result => {  
                         // console.log(result)
                         res.status(200).json({
-                            state: true, 
+                            state: 1, 
                             msg: "User Updated"
                         })
                     })
                     .catch(err => {
                         // console.log(err)
                         res.status(500).json({
-                            state: false,
+                            state: 5,
                             msg: "Error on update"
                         })
                     })
@@ -202,9 +204,25 @@ router.post('/updateProfile', (req, res, next) => {
         .catch(err => {
             console.log(err)
             res.status(500).json({
-                state: false,
+                state: 5,
                 msg: "Error on find"
             })
+        })
+})
+
+//user delete
+router.post('/deleteUser', (req, res, next) => {
+    const user = req.body.email;
+    User
+        .find({ email: user })
+        .exec()
+        .then(user => {
+            if(user.length < 1){
+                res.status(404).json({
+                    state: 2,
+                    msg: "User Not Found"
+                })
+            }
         })
 })
 
