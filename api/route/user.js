@@ -198,7 +198,7 @@ router.post('/login', (req, res) =>{
                         else {
                             console.log(err)
                             return res.status(200).json({
-                                state: 5,
+                                state: 6,
                                 JWT_Token: null
                             })
                         }
