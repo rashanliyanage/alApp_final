@@ -48,17 +48,31 @@ async function getSubject(res,callback) {
     });;
   
  }
-
- async function addTopic(subjectName,number,name,displayName){
-    subjectModel.find({subjectName:subjectName}).exec().then(
-      result => {
-        if(result>0){
-          result.topic.number=number;
-          result.topic.name=name;
-          result.topic.displayName=displayName
+ 
+ async function addTopic(topic, subjectName, cb){
+    console.log(subjectName);
+    console.log(topic);
+    subjectModel
+      .find({subjectName:subjectName})
+      .exec()
+      .then(result => {
+        if(result.length >= 1){
+          console.log("in")
+          result[0].topic
+            .push(topic) 
+          result[0] 
+            .save()
+            .then(result => {
+              console.log(result)
+              return cb(null, result)
+            })
+            .catch(err => {
+              return cb(err, null)
+            })
+        } else{
+          return cb(err, null)
         }
-      }
-    )     
+      })     
  }
 
 module.exports.addTopic = addTopic;

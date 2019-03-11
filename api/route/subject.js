@@ -27,18 +27,18 @@ router.post('/add-subject', function (req,res) {
 
 router.post('/add-topic', function (req,res) {
     console.log('add new topic');
-
+    const subjectName = req.body.subjectName;
     const topic = {
-        subjectName:req.body.subjectName,
         number:req.body.number,
         name:req.body.name,
         displayName:req.body.displayName
     }
-
-    subjectController.addTopic(topic, function (err, topic) {
+    subjectController.addTopic(topic, subjectName, function (err, topic) {
 
         if (err) {
-            throw err;
+            res.status(500).send({
+                success: false
+            })
         } else {
             res.status(200).send({
                 success: true,
