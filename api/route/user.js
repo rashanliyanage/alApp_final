@@ -20,11 +20,18 @@ router.post('/register', (req, res, next) => {
         .exec()
         .then(user => {  
             if(user.length >= 1){
-                console.log('user exist');
-                return res.status(409).json({
-                    state: 4, 
-                    exist: true
-                });
+                if(user[0].isVerified == false){
+                    res.status(200).json({
+                        state: 3,
+                        msg: "User Exist, Not verified"
+                    })
+                } else{
+                    console.log('user exist');
+                    return res.status(409).json({
+                        state: 4, 
+                        exist: true
+                    });
+                }
             } else { 
                 console.log("else block")
                 bcrypt.genSalt(10, function(salt) {
@@ -100,6 +107,55 @@ router.post('/userVerify', (req, res, next) => {
             }    
         })
         .catch(err => {
+            res.status(500).json({
+                state: 5
+            })
+        })
+})
+
+//resend verification code
+router.post('/resendCode', (req, res, next) => {
+    var email = req.body.email;
+    console.log(email);
+    User
+        .find({ email: email })
+        .exec()
+        .then(user => {
+            console.log(user)
+            if(user.length >= 1){
+                if(user[0].isVerified == true){
+                    res.status(200).json({
+                        state: 8,
+                        msg: "User Already Verified"
+                    })
+                } else{
+                    var newCode = emailController.generateRandomNumber();
+                    console.log(newCode);
+                    emailController.sendVerificationCode(email, newCode);
+                    user[0].verificationCode = newCode;
+                    // var updateProperty[verificationCode] = newCode;
+                    User[0]
+                        .update({ _id: user[0]._id })
+                        .exec()
+                        .then(result => { 
+                            res.status(200).json({
+                                state: 1,
+                                newCode: newCode
+                            })
+                        })
+                        .catch(err => {
+                            console.log(err)
+                            res.status(200).json({
+                                state: 5
+                            })
+                        })
+                }
+            } else{
+                console.log("else");
+            }
+        })
+        .catch(err => {
+            console.log(err)
             res.status(500).json({
                 state: 5
             })
@@ -211,6 +267,11 @@ router.post('/updateProfile', auth.decode, (req, res, next) => {
 })
 
 //user delete
+/*
+When user email receive as req.body.email , 
+this route check that email and set isVerified property of user as false
+to deny access to system.
+*/
 router.post('/deleteUser', (req, res, next) => {
     const user = req.body.email;
     User
