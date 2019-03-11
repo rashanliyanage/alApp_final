@@ -133,10 +133,8 @@ router.post('/resendCode', (req, res, next) => {
                     console.log(newCode);
                     emailController.sendVerificationCode(email, newCode);
                     user[0].verificationCode = newCode;
-                    // var updateProperty[verificationCode] = newCode;
-                    User[0]
-                        .update({ _id: user[0]._id })
-                        .exec()
+                    user[0]
+                        .save()
                         .then(result => { 
                             res.status(200).json({
                                 state: 1,
@@ -214,7 +212,7 @@ router.post('/login', (req, res) =>{
 });
 
 //user edit or update
-router.post('/updateProfile', auth.decode, (req, res, next) => {
+router.post('/updateProfile', (req, res, next) => {
     console.log("User Update")
     console.log(req.body)
     userEmail = req.body.email;
@@ -230,7 +228,6 @@ router.post('/updateProfile', auth.decode, (req, res, next) => {
             } else{
                 // console.log(user[0]);
                 user[0].isVerified = req.body.isVerified;
-                user[0].password = req.body.password;
                 user[0].role = req.body.role;
                 user[0].firstName = req.body.firstName;
                 user[0].lastName = req.body.lastName;
