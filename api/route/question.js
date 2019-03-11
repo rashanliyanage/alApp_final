@@ -5,18 +5,18 @@ var  questionController =require('../controller/questionsController')
 router.post('/add-question',(req,res)=>{
     console.log("add question");
     const question = {
-        subjectId = req.body.subjectId,
-        topicId = req.body.topicId,
-        year = req.body.year,
-        qNumber = req.body.qNumber,
-        question = req.body.question,
-        number = req.body.number,
-        qImageUrl = req.body.qImageUrl,
-        cAnsNumber = req.body.cAnsNumber,
-        aNumber = req.body.aImageUrl,
-        aValue = req.body.aImageUrl,
-        videoId = req.body.vedioId,
-        ansDiscription = req.body.ansDiscription
+        subjectId : req.body.subjectId,
+        topicId : req.body.topicId,
+        year : req.body.year,
+        qNumber : req.body.qNumber,
+        question : req.body.question,
+        number : req.body.number,
+        qImageUrl : req.body.qImageUrl,
+        cAnsNumber : req.body.cAnsNumber,
+        aNumber : req.body.aImageUrl,
+        aValue : req.body.aImageUrl,
+        videoId : req.body.vedioId,
+        ansDiscription : req.body.ansDiscription
       }
 
       questionController.addQuestion(question, function (err, question) {
