@@ -10,3 +10,4 @@
   already verified: 7
   varified: 8
   correct: 9
+  no permission: 10
