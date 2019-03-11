@@ -38,7 +38,8 @@ router.post('/register', (req, res, next) => {
                     bcrypt.hash(req.body.password, salt, null, function(err, hash) {
                         console.log(hash)
                         if(err){
-                            return res.status(500).json({     
+                            return res.status(500).json({   
+                                state: 5  
                             });   
                         }else {
                             userController.saveUser(req, hash, verificationCode)
@@ -131,7 +132,7 @@ router.post('/resendCode', (req, res, next) => {
                 } else{
                     var newCode = emailController.generateRandomNumber();
                     console.log(newCode);
-                    emailController.sendVerificationCode(email, newCode);
+                    emailController.resendVerificationCode(email, newCode);
                     user[0].verificationCode = newCode;
                     user[0]
                         .save()
@@ -310,6 +311,73 @@ router.post('/deleteUser', (req, res, next) => {
             res.status(500).json({
                 state: 5
             })
+        })
+})
+
+//confirm email
+router.post('/emailConfirm', (req, res, next) => {
+    var email = req.body.email;
+    var code = req.body.code;
+    User 
+        .find({ email: email })
+        .exec()
+        .then(user => {
+            if(user.length >= 1){
+                if((user[0].verificationCode == code) && (user[0].isVerified == true)){
+                    res.status(200).json({
+                        state: 1
+                    })
+                } else{
+                    res.status(500).json({
+                        state: 6
+                    })
+                }
+            } else{
+                res.status(500).json({
+                    state: 2
+                })
+            }
+        })
+})
+
+//reset password
+router.post('/resetPassword', (req, res, next) => {
+    var email = req.body.email;
+    var newPassword = req.body.password;
+    User
+        .find({ email: email })
+        .exec()
+        .then(user => {
+            if(user.length < 1){
+                res.status(500).json({
+                    state: 2
+                })
+            } else{
+                bcrypt.genSalt(10, function(salt){
+                    bcrypt.hash(newPassword, salt, null, function(err, hash){
+                        console.log(hash);
+                        if(err){
+                            return res.status(500).json({
+                                state: 5
+                            })
+                        } else{
+                            user[0].password = hash;
+                            user[0]
+                                .save()
+                                .then(result => {
+                                    res.status(200).json({
+                                        state: 1
+                                    })
+                                })
+                                .catch(err => {
+                                    res.status(500).json({
+                                        state: 5
+                                    })
+                                })
+                        }
+                    })
+                })
+            }
         })
 })
 
