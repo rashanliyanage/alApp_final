@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 const QuestionSchema = mongoose.Schema({
      subjectId: { type:mongoose.Schema.Types.ObjectId, ref: 'Subjects' },
-     topicId: { type:Number,default:null, require:true },// need to referance topic id in topic schem  (not fix)
+     topicId: { type:String,default:null, require:true },// need to referance topic id in topic schem  (not fix)
      year: { type:String, default:null },
      qNumber: { type:String, default:null },// question number of paper
      question: { type:String, default:null },//question

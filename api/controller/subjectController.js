@@ -14,7 +14,7 @@ async function addSubject(subjectName,displayName,callback) {
  if((subjectName !=null) && (displayName!=null)){
 
 var newSubject =  new subjectModel({
-  name:subjectName,
+  subjectName:subjectName,
   displayName:displayName
 }); 
 
@@ -57,7 +57,6 @@ async function getSubject(res,callback) {
       .exec()
       .then(result => {
         if(result.length >= 1){
-          console.log("in")
           result[0].topic
             .push(topic) 
           result[0] 
@@ -70,7 +69,7 @@ async function getSubject(res,callback) {
               return cb(err, null)
             })
         } else{
-          return cb(err, null)
+          return cb('err', null)
         }
       })     
  }

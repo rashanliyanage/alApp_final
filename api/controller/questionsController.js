@@ -1,40 +1,26 @@
 questionModel = require('../model/questionModel');
 
-async function addQuestion(req,callback) {
-    
-    subjectId = req.body.subjectId,
-    topicId = req.body.topicId,
-    year = req.body.year,
-    qNumber = req.body.qNumber,
-    question = req.body.question,
-    number = req.body.number,
-    qImageUrl = req.body.qImageUrl,
-    cAnsNumber = req.body.cAnsNumber,
-    aNumber = req.body.aImageUrl,
-    aValue = req.body.aImageUrl,
-    videoId = req.body.vedioId,
-    ansDiscription = req.body.ansDiscription
+async function addQuestion(qes,cb) {
 
     const newQuestion = new questionModel()
-       newQuestion.subjectId = subjectId,
-       newQuestion.topicId = topicId,
-       newQuestion.year = year,
-       newQuestion.qNumber = qNumber,
-       newQuestion.question = question,
-       newQuestion.number = number,
-       newQuestion.qImageUrl = qImageUrl,
-       newQuestion.correctAnswer.cAnsNumber = cAnsNumber,
-       newQuestion.answers.aNumber = aNumber,
-       newQuestion.answers.aValue = aValue,
-       newQuestion.videoId = videoId,
-       newQuestion.ansDiscription = ansDiscription
+       newQuestion.subjectId = qes.subjectId,
+       newQuestion.topicId = qes.topicId,
+       newQuestion.year = qes.year,
+       newQuestion.qNumber = qes.qNumber,
+       newQuestion.question = qes.question,
+       newQuestion.number = qes.number,
+       newQuestion.qImageUrl = qes.qImageUrl,
+       newQuestion.correctAnswer.cAnsNumber = qes.cAnsNumber,
+       newQuestion.answers.aNumber = qes.aNumber,
+       newQuestion.answers.aValue = qes.aValue,
+       newQuestion.videoId = qes.videoId,
+       newQuestion.ansDiscription = qes.ansDiscription
     
-     newQuestion.save(function(err,newQuestion){
-           callback(err,newQuestion);
-     })
+     newQuestion.save(cb)
      .catch(err => {
          res.status(500).json({
-             state: false
+             state: false,
+             error:err
          }) 
      });   
 }
