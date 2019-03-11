@@ -18,6 +18,8 @@ const QuestionSchema = mongoose.Schema({
      }],
      videoId: [{ type:mongoose.Schema.Types.ObjectId, ref: 'Videos' }],
      ansDiscription: { type:String, default:null },//should be a url
+},{
+   timestamps: true
 });
 
 module.exports = mongoose.model('Questions', QuestionSchema);
