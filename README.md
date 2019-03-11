@@ -8,3 +8,4 @@
   error: 5
   incorrect: 6
   already verified: 7
+  varified: 8
