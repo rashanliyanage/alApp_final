@@ -39,7 +39,7 @@ router.post('/register', (req, res, next) => {
                         console.log(hash)
                         if(err){
                             return res.status(500).json({   
-                                state: 5  
+                                state: 5   
                             });   
                         }else {
                             userController.saveUser(req, hash, verificationCode)
@@ -168,6 +168,7 @@ router.post('/login', (req, res) =>{
         .find({ email: req.body.email })
         .exec()
         .then(user => {
+            console.log(user)
             if(user.length < 1){
                 return res.status(200).json({
                     state: 2,
@@ -195,6 +196,7 @@ router.post('/login', (req, res) =>{
                             });  
                         }
                         else {
+                            console.log(err)
                             return res.status(200).json({
                                 state: 5,
                                 JWT_Token: null
