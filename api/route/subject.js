@@ -28,12 +28,14 @@ router.post('/add-subject', function (req,res) {
 router.post('/add-topic', function (req,res) {
     console.log('add new topic');
 
-    var subjectName = req.body.subjectName;
-    var number = req.body.number;
-    var name = req.body.name;
-    var displayName = req.body.displayName;
+    const topic = {
+        subjectName:req.body.subjectName,
+        number:req.body.number,
+        name:req.body.name,
+        displayName:req.body.displayName
+    }
 
-    subjectController.addTopic(subjectName, number, name, displayName, function (err, topic) {
+    subjectController.addTopic(topic, function (err, topic) {
 
         if (err) {
             throw err;
