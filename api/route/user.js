@@ -223,21 +223,29 @@ router.post('/deleteUser', (req, res, next) => {
                     msg: "User Not Found"
                 })
             } else{
-                console.log(user);
-                user[0].isVerified = false;
-                user[0]
-                    .save()
-                    .then(result => {
-                        console.log(result);
-                        res.status(200).json({
-                            state: 1
-                        })
+                if(user[0].isVerified == false){
+                    res.status(200).json({
+                        state: 3,
+                        msg: "Not verified, Marked as Deleted"
                     })
-                    .catch(err => {
-                        res.status(500).json({
-                            state: 5
+                } else{
+                    console.log(user);
+                    user[0].isVerified = false; 
+                    user[0]
+                        .save()
+                        .then(result => {
+                            console.log(result);
+                            res.status(200).json({
+                                state: 1
+                            })
                         })
-                    })
+                        .catch(err => {
+                            res.status(500).json({
+                                state: 5
+                            })
+                        })
+                }
+                
             }
         })
         .catch(err => {
