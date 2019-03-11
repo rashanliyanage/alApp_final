@@ -37,6 +37,42 @@ function sendVerificationCode(receiver, verificationCode) {
     });
 }
 
+function resendVerificationCode(receiver, verificationCode) {
+    const sender = 'project.alapp@gmail.com';
+    const subject = 'New Verification Code';
+    
+    const transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+            user: 'project.alapp@gmail.com',
+            pass: 'alapp12345'
+        },
+        tls: {
+            rejectUnauthorized: false
+        }
+    });
+
+    const mailOptions = {
+        from: sender,
+        to: receiver,
+        subject: subject,
+        html: '<h1>Welcome</h1><p>Your new verification code is </p>' + verificationCode
+    };
+
+    transporter.sendMail(mailOptions, function (error, info) {
+        if (error) {
+            console.log('error');
+            console.log(error);
+            throw new Error('email sending failed');
+            
+        } else {
+            res.status(200).json({
+                state: true
+            })
+        }
+    });
+}
+
 function generateRandomNumber(req, res, next) {
     const len = 7;
     return crypto 
@@ -47,5 +83,6 @@ function generateRandomNumber(req, res, next) {
 
 module.exports = {
     sendVerificationCode: sendVerificationCode,
+    resendVerificationCode: resendVerificationCode,
     generateRandomNumber: generateRandomNumber
 };
