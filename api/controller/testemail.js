@@ -25,29 +25,32 @@ function sendMail(){
         auth: {
             user: 'project.alapp@gmail.com',
             pass: 'alapp12345'  
+        },
+        tls: {
+            rejectUnauthorized: false
         }
     });
 
     readHTMLFile(__dirname + 'api/templates/register/registerEmail.html', function(err, html) {
-        console.log("read html file"); 
+        console.log("read html file");
         var template = handlebars.compile(html);
         var replacements = {
             username: "John Doe"
-        };
+        }; 
         var htmlToSend = template(replacements);
         var mailOptions = {
             from: sender,
-            to : 'dldndasanayaka@gmail.com',
+            to : 'dldndasanayaka@gmail.com', 
             subject : 'test subject',
             html : htmlToSend
-        };
+        }; 
         transporter.sendMail(mailOptions, function (error, response) {
-            if (error) {
+            if (error) { 
                 console.log(error);
-                callback(error, null);
+                // callback(error, null);
             }
         });
-    });
+    }); 
 }
 
 module.exports = {
