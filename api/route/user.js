@@ -8,6 +8,7 @@ var config = require('../../config/dbconfig');
 
 var userController = require('../controller/userController');
 var emailController = require('../controller/emailController');
+var testemail = require('../controller/testemail');
 
 var auth = require('../middlewares/auth-guard');
 
@@ -383,13 +384,19 @@ router.post('/resetPassword', (req, res, next) => {
         })
 })
 
+//test email send
+router.get('/test', (req, res, next) => {
+    console.log("test");
+    testemail.sendMail()
+})
+
 /**
  * created by:Yohan
  * created at:
  * reason:authenticate user
  * 
  * **/
-
+   
 router.post('/teacherRegistration', (req, res, next) => {
     const name = req.body.name;
     const email = req.body.email;

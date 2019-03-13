@@ -70,7 +70,7 @@ async function getSubject(res,callback) {
               return cb(err, null)
             })
         } else{
-          return cb(err, null)
+          return cb("err", null)
         }
       })     
  }
